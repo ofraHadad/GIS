@@ -36,25 +36,12 @@ public class Pixel implements Geom_element{
 		return "("+getX()+","+getY()+")";
 	}
 
-	public int getX() {
-		return x;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	public int getY() {
-		return y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-
 	public double distance(Pixel p) {
 		double x= Math.pow(getX()-p.getX(), 2);
 		double y= Math.pow(getY()-p.getY(), 2);
 		return Math.sqrt(x+y);
 	}
-
+///////////////////////Geom_element//////////////////////////////////
 	@Override
 	public double distance3D(Point3D p) {
 		if(p.z()==0) {
@@ -71,5 +58,20 @@ public class Pixel implements Geom_element{
 		double y= Math.pow(getY()-p.y(), 2);
 		return Math.sqrt(x+y);
 	}
+	
+/////////////////////////////////////////Getters and Setters////////////////////////////////////
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+
 
 }

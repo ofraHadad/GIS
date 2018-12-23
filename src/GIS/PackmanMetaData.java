@@ -6,6 +6,11 @@ import java.util.Iterator;
 import Geom.Point3D;
 import game.Fruit;
 
+/**
+ * represent the meta data of a packman- alt, grade, id, time,radius, speed, eaten fruits; implement Meta_data
+ * @author ofra and shira
+ *
+ */
 public class PackmanMetaData implements Meta_data{
 	private int id;
 	private int alt;
@@ -16,6 +21,12 @@ public class PackmanMetaData implements Meta_data{
 	private double time;
 	private double timeNext;
 
+
+	///////////////////////////////////////////constructors/////////////////////////////////////////
+	/**
+	 * create the packman meta data with id
+	 * @param id
+	 */
 	public PackmanMetaData(int id) {
 		setId(id);
 		setAlt(0);
@@ -25,7 +36,12 @@ public class PackmanMetaData implements Meta_data{
 	}
 
 
-
+	/**
+	 * create a packman meta data from two String arrays.
+	 * (used for read a CSV file)
+	 * @param head
+	 * @param line
+	 */
 	public PackmanMetaData(String [] head, String[] line) {
 		int hasId=serch(head,"id");
 		int hasSpeed= serch(head,"Speed");
@@ -36,14 +52,14 @@ public class PackmanMetaData implements Meta_data{
 		}
 		else {
 			setId(Integer.parseInt(line[hasId]));
-			
+
 			if(hasSpeed== head.length) {
 				setSpeed(0);
 			}
 			else {
 				setSpeed( Integer.parseInt(line[hasSpeed]));
 			}
-			
+
 			if(hasRadius== head.length) {
 				setRadius(0);
 			}
@@ -56,10 +72,13 @@ public class PackmanMetaData implements Meta_data{
 			else {
 				setAlt( Integer.parseInt(line[hasAlt]));
 			}
-			
+
 		}
 	}
-	
+/**
+ * the copy constructor
+ * @param data
+ */
 	public PackmanMetaData(PackmanMetaData data) {
 		setAlt(data.getAlt());
 		setId(data.getId());
@@ -74,15 +93,10 @@ public class PackmanMetaData implements Meta_data{
 		setTimeNext(data.getTimeNext());
 	}
 
+
+
 	
-
-	public String toString() {
-		Iterator <Fruit> it= getEat().iterator();
-		
-		return "Alt: "+getAlt()+", Weight/Grade: "+getGrade()+", Id: "+ getId()+", Time: "+getTimeNext()+", Start: "+getTime()+";"+
-				", Speed: "+ getSpeed()+", Radius: "+ getRadius();
-	}
-
+/////////////////////////////////Meta_data///////////////////////////////////////////
 	@Override
 	public long getUTC() {
 		// TODO Auto-generated method stub
@@ -94,7 +108,20 @@ public class PackmanMetaData implements Meta_data{
 		// TODO Auto-generated method stub
 		return null;
 	}
+///////////////////////////////methods/////////////////////////////////////////////
+	
+	public String toString() {
+		Iterator <Fruit> it= getEat().iterator();
 
+		return "Alt: "+getAlt()+", Weight/Grade: "+getGrade()+", Id: "+ getId()+", Time: "+getTimeNext()+", Start: "+getTime()+";"+
+		", Speed: "+ getSpeed()+", Radius: "+ getRadius();
+	}
+
+	public boolean equals(Meta_data e) {
+		return (getUTC()==e.getUTC())&&(toString().substring(toString().indexOf("Id: ")+4, toString().indexOf(", Time:")))
+				.equals(e.toString().substring(e.toString().indexOf("Id: ")+4, e.toString().indexOf(", Time:")));
+	}
+	
 	private int serch(String[] head,String s) {
 		int index=head.length;
 		for (int i=0; i<head.length; i++) {
@@ -108,11 +135,7 @@ public class PackmanMetaData implements Meta_data{
 		return index;
 	}
 	
-	public boolean equals(Meta_data e) {
-		return (getUTC()==e.getUTC())&&(toString().substring(toString().indexOf("Id: ")+4, toString().indexOf(", Time:")))
-				.equals(e.toString().substring(e.toString().indexOf("Id: ")+4, e.toString().indexOf(", Time:")));
-	}
-
+/////////////////Getters and Setters///////////////////////////////////////
 	public int getId() {
 		return id;
 	}
@@ -173,6 +196,6 @@ public class PackmanMetaData implements Meta_data{
 	public void setTimeNext(double timeNext) {
 		this.timeNext = timeNext;
 	}
-	
+
 
 }
