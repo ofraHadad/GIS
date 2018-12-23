@@ -27,40 +27,43 @@ public class ElementMetaData implements Meta_data{
 
 
 
-/**
- * Constructor that get two arrays of String
- * used in the read method , to read csv files 
- * @param line
- * @param head
- */
+	/**
+	 * Constructor that get two arrays of String
+	 * used in the read method , to read csv files 
+	 * @param line
+	 * @param head
+	 */
 	public ElementMetaData(String[] line,String[] head) {
 
-			setMAC(line[serch(head, "MAC")]);
-			setSSID(line[serch(head, "SSID")]);
-			setAuthMode(line[serch(head, "AuthMode")]);
-			setFirstSeen(line[serch(head, "FirstSeen")]);
-			setChannel(Integer.parseInt(line[serch(head, "Channel")]));
-			setRSSI(Integer.parseInt(line[serch(head, "RSSI")]));
-			setAccuracyMeters(Integer.parseInt(line[serch(head, "AccuracyMeters")]));
-			setType(line[serch(head, "Type")]);
-			int i= getFirstSeen().indexOf(' ');
-			setDate(getFirstSeen().substring(0, i));
-			setTime(getFirstSeen().substring(i+1));
+		setMAC(line[serch(head, "MAC")]);
+		setSSID(line[serch(head, "SSID")]);
+		setAuthMode(line[serch(head, "AuthMode")]);
+		setFirstSeen(line[serch(head, "FirstSeen")]);
+		setChannel(Integer.parseInt(line[serch(head, "Channel")]));
+		setRSSI(Integer.parseInt(line[serch(head, "RSSI")]));
+		setAccuracyMeters(Integer.parseInt(line[serch(head, "AccuracyMeters")]));
+		setType(line[serch(head, "Type")]);
+		int i= getFirstSeen().indexOf(' ');
+		setDate(getFirstSeen().substring(0, i));
+		setTime(getFirstSeen().substring(i+1));
+
+	}
+	public ElementMetaData() {
 		
 	}
-/**
- * check if two ElementMetaData are equals
- * @param m
- * @return
- */
+	/**
+	 * check if two ElementMetaData are equals
+	 * @param m
+	 * @return
+	 */
 	public boolean equals(ElementMetaData m) {
 		if(getMAC().equals(m.getMAC()) && getSSID().equals(m.getSSID()) && getAuthMode().equals(m.getAuthMode()) &&
 				getFirstSeen().equals(m.getFirstSeen()) && getChannel()==m.getChannel() && getRSSI()==m.getRSSI() &&
 				getAccuracyMeters()==m.getAccuracyMeters() && getType().equals(m.getType())) {return true;}
 		return false;
 	}
-	
-///////////////////////////Meta_data/////////////////////////////////////////////////
+
+	///////////////////////////Meta_data/////////////////////////////////////////////////
 	@Override
 	public long getUTC() {
 		// https://stackoverflow.com/questions/26637168/how-to-convert-a-date-to-milliseconds
@@ -69,14 +72,14 @@ public class ElementMetaData implements Meta_data{
 		try {
 			date = sdf.parse(FirstSeen);
 			long timeInMillis = date.getTime();
-			 return timeInMillis;
+			return timeInMillis;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return 0;
 		}	
 	}
-	
+
 	@Override
 	public Point3D get_Orientation() {
 		// TODO Auto-generated method stub
@@ -88,7 +91,7 @@ public class ElementMetaData implements Meta_data{
 		return "MAC: "+getMAC()+", SSID: "+ getSSID()+ ", AuthMode: "+ getAuthMode()+", FirstSeen: "+getFirstSeen()+
 				", Channel: "+ getChannel()+ ", RSSI: "+ getRSSI()+", AccuracyMeters: "+ getAccuracyMeters()+", Type: "+getType();
 	}
-	
+
 	///////////////////////////////getters and setters///////////////////////////////////
 	public String getDate() {
 		return date;
@@ -171,7 +174,7 @@ public class ElementMetaData implements Meta_data{
 		return Type;
 	}
 
-///////////////////////////////////////private/////////////////////////////////
+	///////////////////////////////////////private/////////////////////////////////
 	private int serch(String[] head,String s) {
 		int index=head.length;
 		for (int i=0; i<head.length; i++) {
@@ -181,8 +184,8 @@ public class ElementMetaData implements Meta_data{
 			}
 		}
 
-		if(index>10) {
-		throw new RuntimeException("ivalid input");	
+		if(index>=head.length) {
+			throw new RuntimeException("ivalid input");	
 		}
 		return index;
 	}

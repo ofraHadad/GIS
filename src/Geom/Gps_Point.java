@@ -41,6 +41,16 @@ public class Gps_Point implements Geom_element   {
 		}
 	}
 
+	public Gps_Point(String[] head, String[] line ) {//החלפתי בין XY
+		set_x(Double.parseDouble(line[serch(head,"CurrentLongitude")]));
+		set_y(Double.parseDouble(line[serch(head,"CurrentLatitude")]));
+		set_z(Double.parseDouble(line[serch(head,"AltitudeMeters")]));
+		if(! isValid_Gps_Point()) {
+			throw new RuntimeException("is invalid input");
+		}
+	}
+
+
 	////////////////////Methods\\\\\\\\\\\\\\\\\\\\
 	@Override
 	public double distance3D(Point3D p) {
@@ -51,6 +61,14 @@ public class Gps_Point implements Geom_element   {
 	@Override
 	public double distance2D(Point3D p) {
 		Gps_Point gps=new Gps_Point(p.x(),p.y(),p.z()) ;
+		Gps_Point diff=new Gps_Point(gps.get_x()-get_x(),gps.get_y()-get_y(),gps.get_z()-get_z());
+		double LonNorm= computeLonNorm(this);
+		Point3D diffMeter=ConvertsDegreesToMeters(diff,LonNorm);
+		double distanceXY=Math.sqrt((Math.pow(diffMeter.x(), 2))+(Math.pow(diffMeter.y(),2)));
+		return distanceXY;
+	}
+	
+	public double distance2d(Gps_Point gps) {
 		Gps_Point diff=new Gps_Point(gps.get_x()-get_x(),gps.get_y()-get_y(),gps.get_z()-get_z());
 		double LonNorm= computeLonNorm(this);
 		Point3D diffMeter=ConvertsDegreesToMeters(diff,LonNorm);
@@ -71,11 +89,11 @@ public class Gps_Point implements Geom_element   {
 		return true;
 	}
 
-/**
- * The function receives a gps point and checks the distance from the point given to the point in the class
- * @param gps1
- * @return The distance between the points
- */
+	/**
+	 * The function receives a gps point and checks the distance from the point given to the point in the class
+	 * @param gps1
+	 * @return The distance between the points
+	 */
 	public double distance3d(Gps_Point gps1) {
 		Gps_Point diff=new Gps_Point(gps1.get_x()-get_x(),gps1.get_y()-get_y(),gps1.get_z()-get_z());
 		double LonNorm= computeLonNorm(this);
@@ -88,7 +106,7 @@ public class Gps_Point implements Geom_element   {
 
 		return Math.sqrt((Math.pow(distanceXY, 2))+(Math.pow(diffZ,2)));
 	}
-	
+
 	/**
 	 * The function converts a gps point to a point3D point
 	 * @param gps
@@ -112,19 +130,19 @@ public class Gps_Point implements Geom_element   {
 		}
 		return false;
 	}
-/**
- * the function print the gps point
- */
+	/**
+	 * the function print the gps point
+	 */
 	public String toString() {
 		return "("+get_x()+","+get_y()+","+get_z()+")";
 	}
-////////////////////private\\\\\\\\\\\\\\\\\\\\
-/**
- *  The function converts a point3D point to a gps point
- * @param meter
- * @param LonNorm
- * @return The point received after the conversion
- */
+	////////////////////private\\\\\\\\\\\\\\\\\\\\
+	/**
+	 *  The function converts a point3D point to a gps point
+	 * @param meter
+	 * @param LonNorm
+	 * @return The point received after the conversion
+	 */
 	private Gps_Point ConvertsMeterToDegree(Point3D meter,double LonNorm) {
 		long Radius_earth=6371000;
 		Point3D rad=new Point3D((Math.asin((meter.x())/(Radius_earth))),(Math.asin((meter.y())/(Radius_earth*LonNorm))),meter.z());
@@ -152,9 +170,26 @@ public class Gps_Point implements Geom_element   {
 	 * @return
 	 */
 	private static double r2d(double a) { return Math.toDegrees(a);}
+	
+
+	private int serch(String[] head,String s) {
+		int index=head.length;
+		for (int i=0; i<head.length; i++) {
+			if(s.equals(head[i])||s.contains(head[i])) {
+				index= i;
+				return index;
+			}
+		}
+		if(index>head.length-1) {
+			throw new RuntimeException("ivalid input");	
+		}
+		return index;
+	}
+	
 	public double get_x() {
 		return _x;
 	}
+
 
 	public void set_x(double _x) {
 		this._x = _x;

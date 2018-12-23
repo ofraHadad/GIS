@@ -20,7 +20,7 @@ public class LayerMetaData implements Meta_data {
  * @param e
  */
 	public LayerMetaData(MyGisElement e) {
-		this.createdTime= e.getData().getFirstSeen();	
+		this.createdTime= e.getMetaData().getFirstSeen();	
 	}
 
 

@@ -13,7 +13,7 @@ public class JFrmaeGraphics extends JPanel{
 
 
 	public void paint(Graphics g){
-		// Image image = Toolkit.getDefaultToolkit().getImage("example.jpg");
+	Image image = Toolkit.getDefaultToolkit().getImage("Ariel1.jpg");
 			int w = this.getWidth();
 			int h = this.getHeight();
 			 g.setColor(Color.red);

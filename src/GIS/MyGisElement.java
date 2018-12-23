@@ -3,11 +3,14 @@ package GIS;
 import Coords.MyCoords;
 import Geom.Geom_element;
 import Geom.Gps_Point;
+import Geom.Pixel;
 import Geom.Point3D;
+import game.Map;
 
 public class MyGisElement implements GIS_element{
 	private Gps_Point gps;
 	private ElementMetaData metaData;
+
 
 	/**
 	 * Constructor that get two arrays of String
@@ -16,30 +19,35 @@ public class MyGisElement implements GIS_element{
 	 * @param head
 	 */
 	public MyGisElement(String[] line, String[] head) {
-		gps= new Gps_Point(Double.parseDouble(line[serch(head,"CurrentLatitude")]),
-				Double.parseDouble(line[serch(head,"CurrentLongitude")])
-				, Double.parseDouble(line[serch(head,"AltitudeMeters")]));
+
+		gps= new Gps_Point(head, line);
 		metaData= new ElementMetaData(line, head);
 	}
 	
-/////////////////////////////////GIS_element/////////////////////////////////////
+	
+
+	/////////////////////////////////GIS_element/////////////////////////////////////
 	@Override
-	public Gps_Point getGeom() {
+	public Geom_element getGeom() {
 		return gps;
 	}
 	@Override
-	public ElementMetaData getData() {
+	public Meta_data getData() {
 
 		return metaData;
 	}
-	
+
 	@Override
 	public void translate(Point3D vec) {
 		MyCoords c= new MyCoords();
 		Gps_Point newGps=	c.add((Gps_Point) getGeom(), vec);
 		setGps(newGps);
 	}
-	
+	@Override
+	public int whatAmI() {
+		return 0;
+	}
+
 	/////////////////////////////////methods////////////////////////////
 	/**
 	 * check if two elements are equals
@@ -47,12 +55,12 @@ public class MyGisElement implements GIS_element{
 	 * @return
 	 */
 	public boolean equals(GIS_element e) {
-		if(getGeom().equals(e.getGeom()) && getData().equals(e.getData())) {
+		if(getGeom().equals(e.getGeom()) && getData().equals(e.getData()) &&( whatAmI()==e.whatAmI())){
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * return a String that represent the class
 	 */
@@ -60,41 +68,32 @@ public class MyGisElement implements GIS_element{
 		return "GPS Point: "+getGeom().toString()+ "\n"+ getData().toString();
 	}
 
-	
-//////////////////////////////getters and setters//////////////////////////////////////////
+
+	//////////////////////////////getters and setters//////////////////////////////////////////
 	private void setMetaData(ElementMetaData metaData) {
 		this.metaData = metaData;
 	}
-	
+
 	public ElementMetaData getMetaData() {
-		return (ElementMetaData) metaData;
+		return  metaData;
 	}
-	
+
 	private void setGps(Gps_Point geom) {
 		this.gps = geom;
-		
+
+
 	}
-
-
-	
-///////////////////////////////private///////////////////////////	
-	private int serch(String[] head,String s) {
-		int index=head.length;
-		for (int i=0; i<head.length; i++) {
-			if(s.equals(head[i])) {
-				index= i;
-				return index;
-			}
-		}
-
-		if(index>head.length-1) {
-		throw new RuntimeException("ivalid input");	
-		}
-		return index;
+	public Gps_Point getGps(){
+		return gps;
 	}
-
-
 	
+
+
+
+	///////////////////////////////private///////////////////////////	
+
+
+
 
 
 }
